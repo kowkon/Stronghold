@@ -1,7 +1,7 @@
 package castle;
 
 import java.util.ArrayList;
-import buildings.Buildings;
+import buildings.Building;
 import people.Peasant;
 
 public class Castle extends Thread {
@@ -12,9 +12,12 @@ public class Castle extends Thread {
 	private int population;
 	private int maxPopulation;
 
-	private ArrayList<Buildings> buildings;
+	private ArrayList<Building> buildings;
 	private ArrayList<Peasant> peasants;
 
+	/**
+	 * Constructor
+	 */
 	public Castle() {
 		setBuildings(new ArrayList<>());
 		setPeasants(new ArrayList<>());
@@ -22,7 +25,7 @@ public class Castle extends Thread {
 
 	@Override
 	public void run() {
-		
+
 	}
 
 	// GETTERS AND SETTERS
@@ -67,11 +70,11 @@ public class Castle extends Thread {
 		this.maxPopulation = maxPopulation;
 	}
 
-	public ArrayList<Buildings> getBuildings() {
+	public ArrayList<Building> getBuildings() {
 		return buildings;
 	}
 
-	public void setBuildings(ArrayList<Buildings> buildings) {
+	public void setBuildings(ArrayList<Building> buildings) {
 		this.buildings = buildings;
 	}
 

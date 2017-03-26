@@ -2,8 +2,8 @@ package buildings;
 
 import castle.Castle;
 
-public class Buildings extends Thread {
-	
+public class Building extends Thread {
+
 	protected Castle castle;
 	protected boolean working;
 
@@ -13,7 +13,7 @@ public class Buildings extends Thread {
 	 * @param castle
 	 *            The castle that building belongs
 	 */
-	public Buildings(Castle castle) {
+	public Building(Castle castle) {
 		setCastle(castle);
 		setWorking(true);
 	}
