@@ -1,7 +1,7 @@
 package buildings;
 
 import castle.Castle;
-import materials.Material;
+import items.Item;
 
 public abstract class ConsumerProducerBuilding extends ProducerBuilding {
 
@@ -13,7 +13,7 @@ public abstract class ConsumerProducerBuilding extends ProducerBuilding {
 
 	public abstract Building findComsumeBuilding();
 
-	public abstract void consume(Material material);
+	public abstract void consume(Item material);
 
 	public int getConsumeAmount() {
 		return consumeAmount;
