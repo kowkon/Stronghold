@@ -13,7 +13,7 @@ public abstract class ConsumerProducerBuilding extends ProducerBuilding {
 
 	public abstract Building findComsumeBuilding();
 
-	public abstract void consume(Item material);
+	public abstract void consume(Item item);
 
 	public int getConsumeAmount() {
 		return consumeAmount;

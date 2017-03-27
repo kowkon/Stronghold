@@ -16,7 +16,7 @@ public abstract class ProducerBuilding extends Building {
 
 	public abstract Building findProduceBuilding();
 
-	public abstract void produce(Item material);
+	public abstract void produce(Item item);
 
 	public int getProduceAmount() {
 		return produceAmount;
