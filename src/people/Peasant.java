@@ -2,18 +2,19 @@ package people;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Peasant {
 
-	private static ArrayList<String> firstNames = new ArrayList<>();
-	private static ArrayList<String> lastNames = new ArrayList<>();
-	private static boolean namesLoaded = false;
+	private final int nameLength = 20;
 
 	private String firstName;
 	private String lastName;
+	private char gender;
 
 	/**
 	 * Constructor with names
@@ -24,6 +25,7 @@ public class Peasant {
 	 *            Peasant's last name.
 	 */
 	public Peasant(String firstName, String lastName) {
+		this.gender = chooseGender();
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
@@ -33,69 +35,40 @@ public class Peasant {
 	 * last name randomly.
 	 */
 	public Peasant() {
-		if (!namesLoaded) { // check if names are loaded
-			getFirstNames();
-			getLastNames();
-			namesLoaded = true; // names are loaded
-		}
-		this.firstName = chooseFirstName();
-		this.lastName = chooseLastName();
+		this.firstName = chooseFirstNameMale();
 	}
 
-	/**
-	 * Loads first names.
-	 */
-	private void getFirstNames() {
-		File names = new File("firstNames.txt");
-		Scanner inputStream = null;
+	private String chooseFirstNameMale() {
+		RandomAccessFile file = null;
 		try {
-			inputStream = new Scanner(names);
-			while (inputStream.hasNextLine())
-				firstNames.add(inputStream.nextLine());
-		} catch (FileNotFoundException e) {
+			file = new RandomAccessFile("firstNamesMale.txt", "r");
+			long fileLength = file.length();
+			int seekLength = nameLength + 1;
+			int rows = (int) (fileLength / seekLength);
+			Random rndm = new Random();
+			file.seek(seekLength * rndm.nextInt(rows));
+			return file.readLine();
+		} catch (Exception e) {
 			e.printStackTrace();
+			return "";
 		} finally {
-			if (inputStream != null)
-				inputStream.close();
+			if (file != null)
+				try {
+					file.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 
 	/**
-	 * Loads last names.
-	 */
-	private void getLastNames() {
-		File names = new File("lastNames.txt");
-		Scanner inputStream = null;
-		try {
-			inputStream = new Scanner(names);
-			while (inputStream.hasNextLine())
-				lastNames.add(inputStream.nextLine());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			if (inputStream != null)
-				inputStream.close();
-		}
-	}
-
-	/**
-	 * Chooses a random first name from the list.
+	 * Choose random gender
 	 * 
-	 * @return Random first name.
+	 * @return 'm' or 'f'
 	 */
-	private String chooseFirstName() {
+	private char chooseGender() {
 		Random rndm = new Random();
-		return firstNames.get(rndm.nextInt(firstNames.size()));
-	}
-
-	/**
-	 * Chooses a random last name from the list.
-	 * 
-	 * @return Random last name.
-	 */
-	private String chooseLastName() {
-		Random rndm = new Random();
-		return lastNames.get(rndm.nextInt(lastNames.size()));
+		return rndm.nextBoolean() ? 'm' : 'f';
 	}
 
 	// GETTERS AND SETTERS

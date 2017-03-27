@@ -11,7 +11,7 @@ public class Building extends Thread {
 	 * Constructor
 	 * 
 	 * @param castle
-	 *            The castle that building belongs
+	 *            The castle that the building belongs
 	 */
 	public Building(Castle castle) {
 		setCastle(castle);

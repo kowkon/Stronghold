@@ -8,6 +8,12 @@ public abstract class ProducerBuilding extends Building {
 	protected int produceAmount;
 	protected int speed;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param castle
+	 *            The castle that the building belongs
+	 */
 	public ProducerBuilding(Castle castle) {
 		super(castle);
 	}
@@ -17,6 +23,12 @@ public abstract class ProducerBuilding extends Building {
 	public abstract Building findProduceBuilding();
 
 	public abstract void produce(Item item);
+
+	public synchronized void getBackToWork() {
+		this.notify();
+	}
+
+	// GETTERS AND SETTERS
 
 	public int getProduceAmount() {
 		return produceAmount;
