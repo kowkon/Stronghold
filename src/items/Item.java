@@ -17,7 +17,7 @@ public abstract class Item {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with given amount
 	 * 
 	 * @param amount
 	 *            Given amount for the item.
@@ -29,6 +29,8 @@ public abstract class Item {
 	public abstract void invokeBuildingsAdd(Castle castle);
 
 	public abstract void invokeBuildingsRemove(Castle castle);
+
+	public abstract Item create(int amount);
 
 	/**
 	 * Sums this class' amount and given item's amount.
@@ -61,7 +63,10 @@ public abstract class Item {
 	}
 
 	public void setAmount(int amount) {
-		this.amount = amount;
+		if (amount >= 0) // check if amount is non-negative
+			this.amount = amount;
+		else
+			this.amount = 0;
 	}
 
 	public int getStackLimit() {
