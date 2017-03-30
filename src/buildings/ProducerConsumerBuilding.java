@@ -1,9 +1,10 @@
 package buildings;
 
+import buildings.storage.StorageBuilding;
 import castle.Castle;
 import items.Item;
 
-public abstract class ConsumerProducerBuilding extends ProducerBuilding {
+public abstract class ProducerConsumerBuilding extends ProducerBuilding {
 
 	protected int consumeAmount;
 
@@ -13,11 +14,11 @@ public abstract class ConsumerProducerBuilding extends ProducerBuilding {
 	 * @param castle
 	 *            The castle that the building belongs
 	 */
-	public ConsumerProducerBuilding(Castle castle) {
+	public ProducerConsumerBuilding(Castle castle) {
 		super(castle);
 	}
 
-	public abstract Building findComsumeBuilding();
+	public abstract StorageBuilding findComsumeBuilding();
 
 	public abstract void consume(Item item);
 

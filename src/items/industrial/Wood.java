@@ -6,7 +6,15 @@ import items.Item;
 public class Wood extends Item {
 
 	/**
-	 * Constructs a wood object with the specified amount.
+	 * Constructs a Wood with default amount 0.
+	 */
+	public Wood() {
+		setAmount(0);
+		setStackLimit(48);
+	}
+
+	/**
+	 * Constructs a Wood with the specified amount.
 	 * 
 	 * @param amount
 	 *            Amount of wood

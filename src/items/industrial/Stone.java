@@ -6,7 +6,15 @@ import items.Item;
 public class Stone extends Item {
 
 	/**
-	 * Constructs a Stone object with the specified amount.
+	 * Constructs a Stone with default amount 0.
+	 */
+	public Stone() {
+		setAmount(0);
+		setStackLimit(48);
+	}
+
+	/**
+	 * Constructs a Stone with the specified amount.
 	 * 
 	 * @param amount
 	 *            Amount of stone
@@ -30,8 +38,7 @@ public class Stone extends Item {
 
 	@Override
 	public Item create(int amount) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Stone(amount);
 	}
 
 }

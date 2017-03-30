@@ -6,7 +6,15 @@ import items.Item;
 public class Iron extends Item {
 
 	/**
-	 * Constructs a Iron object with the specified amount.
+	 * Constructs an Iron with default amount 0.
+	 */
+	public Iron() {
+		setAmount(0);
+		setStackLimit(48);
+	}
+
+	/**
+	 * Constructs an Iron with the specified amount.
 	 * 
 	 * @param amount
 	 *            Amount of iron
@@ -30,8 +38,7 @@ public class Iron extends Item {
 
 	@Override
 	public Item create(int amount) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Iron(amount);
 	}
 
 }

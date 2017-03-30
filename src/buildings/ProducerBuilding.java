@@ -1,5 +1,6 @@
 package buildings;
 
+import buildings.storage.StorageBuilding;
 import castle.Castle;
 import items.Item;
 
@@ -20,7 +21,7 @@ public abstract class ProducerBuilding extends Building {
 
 	public abstract void work();
 
-	public abstract Building findProduceBuilding();
+	public abstract StorageBuilding findProduceBuilding();
 
 	public abstract void produce(Item item);
 

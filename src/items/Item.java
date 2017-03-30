@@ -8,16 +8,14 @@ public abstract class Item {
 	protected int stackLimit;
 
 	/**
-	 * Constructor
-	 * 
-	 * Default set amount to 0.
+	 * Constructs an Item with default amount 0.
 	 */
 	public Item() {
 		setAmount(0);
 	}
 
 	/**
-	 * Constructor with given amount
+	 * Constructs an Item with given amount.
 	 * 
 	 * @param amount
 	 *            Given amount for the item.
