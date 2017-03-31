@@ -22,7 +22,7 @@ public class Stockpile extends StorageBuilding {
 		for (Item i : rooms) {
 			if (i.getClass().equals(item.getClass()) && i.getAmount() != i.getStackLimit()) {
 				if (i.getAmount() + item.getAmount() <= i.getStackLimit()) {
-					i = i.add(item);
+					i.add(item);
 					return true;
 				} else {
 					item.setAmount(item.getAmount() + i.getAmount() - i.getStackLimit());
@@ -61,7 +61,7 @@ public class Stockpile extends StorageBuilding {
 				removeZeros();
 				removeItem(out);
 			} else {
-				min = min.remove(item);
+				min.remove(item);
 				removeZeros();
 			}
 			return true;
