@@ -19,7 +19,7 @@ public class Woodcutter extends ProducerBuilding {
 	public Woodcutter(Castle castle) {
 		super(castle);
 		produceAmount = 10;
-		speed = 100;
+		speed = 1;
 	}
 
 	@Override

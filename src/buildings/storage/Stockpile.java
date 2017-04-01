@@ -7,7 +7,7 @@ import items.Item;
 public class Stockpile extends StorageBuilding {
 
 	private int roomLimit;
-	private ArrayList<Item> rooms;
+	public ArrayList<Item> rooms;
 
 	public Stockpile(Castle castle) {
 		super(castle);

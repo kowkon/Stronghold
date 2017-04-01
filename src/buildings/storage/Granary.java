@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import castle.Castle;
 import items.Item;
+import items.food.Bread;
 
 public class Granary extends StorageBuilding {
 
@@ -12,6 +13,7 @@ public class Granary extends StorageBuilding {
 	public Granary(Castle castle) {
 		super(castle);
 		rooms = new ArrayList<>();
+		rooms.add(new Bread());
 	}
 
 	@Override

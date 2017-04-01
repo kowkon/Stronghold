@@ -1,19 +1,21 @@
-package buildings.farm;
+package buildings.foodProcessing;
 
 import buildings.Building;
-import buildings.ProducerBuilding;
+import buildings.ProducerConsumerBuilding;
 import buildings.storage.Stockpile;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
 import items.Item;
+import items.foodProcessing.Flour;
 import items.foodProcessing.Wheat;
 
-public class WheatFarm extends ProducerBuilding {
+public class Mill extends ProducerConsumerBuilding {
 
-	public WheatFarm(Castle castle) {
+	public Mill(Castle castle) {
 		super(castle);
 		produceAmount = 1;
-		speed = 50;
+		consumeAmount = 1;
+		speed = 200;
 	}
 
 	@Override
@@ -22,14 +24,45 @@ public class WheatFarm extends ProducerBuilding {
 	}
 
 	@Override
+	public StorageBuilding findComsumeBuilding() {
+		StorageBuilding stockpile = null;
+		for (Building b : castle.getBuildings()) {
+			if (b instanceof Stockpile) {
+				stockpile = (Stockpile) b;
+			}
+		}
+		return stockpile;
+	}
+
+	@Override
+	public synchronized void consume(Item item) {
+		StorageBuilding stockpile;
+		while ((stockpile = findComsumeBuilding()) == null) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		while (!stockpile.removeItem(item)) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
 	public void work() {
 		while (working) {
-			goToFarm();
-			plowField();
-			growSeeds();
-			mow();
+			goToMill();
 			goToStore();
-			produce(new Wheat(produceAmount));
+			consume(new Wheat(consumeAmount));
+			goToMill();
+			grind();
+			goToStore();
+			produce(new Flour(produceAmount));
 		}
 	}
 
@@ -63,31 +96,7 @@ public class WheatFarm extends ProducerBuilding {
 		}
 	}
 
-	private void goToFarm() {
-		try {
-			Thread.sleep(speed * 10);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void plowField() {
-		try {
-			Thread.sleep(speed * 10);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void growSeeds() {
-		try {
-			Thread.sleep(speed * 10);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void mow() {
+	private void goToMill() {
 		try {
 			Thread.sleep(speed * 10);
 		} catch (InterruptedException e) {
@@ -96,6 +105,14 @@ public class WheatFarm extends ProducerBuilding {
 	}
 
 	private void goToStore() {
+		try {
+			Thread.sleep(speed * 10);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void grind() {
 		try {
 			Thread.sleep(speed * 10);
 		} catch (InterruptedException e) {
