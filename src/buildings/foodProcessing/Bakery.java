@@ -36,20 +36,24 @@ public class Bakery extends ProducerConsumerBuilding {
 	}
 
 	@Override
-	public synchronized void consume(Item item) {
+	public void consume(Item item) {
 		StorageBuilding stockpile;
-		while ((stockpile = findComsumeBuilding()) == null) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (noBuildingLock) {
+			while ((stockpile = findComsumeBuilding()) == null) {
+				try {
+					noBuildingLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		while (!stockpile.removeItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (Stockpile.removeLock) {
+			while (!stockpile.removeItem(item)) {
+				try {
+					Stockpile.removeLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -59,7 +63,6 @@ public class Bakery extends ProducerConsumerBuilding {
 		while (working) {
 			goToBakery();
 			goToStore();
-			System.out.println("za-----------");
 			consume(new Flour(consumeAmount));
 			goToBakery();
 			cookBread();
@@ -80,20 +83,24 @@ public class Bakery extends ProducerConsumerBuilding {
 	}
 
 	@Override
-	public synchronized void produce(Item item) {
+	public void produce(Item item) {
 		StorageBuilding granary;
-		while ((granary = findProduceBuilding()) == null) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (noBuildingLock) {
+			while ((granary = findProduceBuilding()) == null) {
+				try {
+					noBuildingLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		while (!granary.addItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (Granary.addLock) {
+			while (!granary.addItem(item)) {
+				try {
+					Granary.addLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

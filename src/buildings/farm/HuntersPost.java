@@ -48,18 +48,22 @@ public class HuntersPost extends ProducerBuilding {
 	@Override
 	public void produce(Item item) {
 		StorageBuilding granary;
-		while ((granary = findProduceBuilding()) == null) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (noBuildingLock) {
+			while ((granary = findProduceBuilding()) == null) {
+				try {
+					noBuildingLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		while (!granary.addItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (Granary.addLock) {
+			while (!granary.addItem(item)) {
+				try {
+					Granary.addLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

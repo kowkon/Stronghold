@@ -19,7 +19,7 @@ public class Woodcutter extends ProducerBuilding {
 	public Woodcutter(Castle castle) {
 		super(castle);
 		produceAmount = 10;
-		speed = 1;
+		speed = 20;
 	}
 
 	@Override
@@ -53,27 +53,31 @@ public class Woodcutter extends ProducerBuilding {
 	}
 
 	@Override
-	public synchronized void produce(Item item) {
-		StorageBuilding stockpile;
-		while ((stockpile = findProduceBuilding()) == null) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+	public void produce(Item item) {
+		synchronized (Stockpile.addLock) {
+			StorageBuilding stockpile;
+			while ((stockpile = findProduceBuilding()) == null) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-		}
-		while (!stockpile.addItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			while (!stockpile.addItem(item)) {
+				try {	
+					System.out.println("waiting");
+					Stockpile.addLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+			System.out.println("working");
 		}
 	}
 
 	private void goToHut() {
 		try {
-			Thread.sleep(speed * 1);
+			Thread.sleep(speed * 10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -81,7 +85,7 @@ public class Woodcutter extends ProducerBuilding {
 
 	private void findTree() {
 		try {
-			Thread.sleep(300 * speed);
+			Thread.sleep(30 * speed);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -89,7 +93,7 @@ public class Woodcutter extends ProducerBuilding {
 
 	private void fellTree() {
 		try {
-			Thread.sleep(500 * speed);
+			Thread.sleep(50 * speed);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -97,7 +101,7 @@ public class Woodcutter extends ProducerBuilding {
 
 	private void chopTree() {
 		try {
-			Thread.sleep(3000 * speed);
+			Thread.sleep(30 * speed);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -105,7 +109,7 @@ public class Woodcutter extends ProducerBuilding {
 
 	private void saw() {
 		try {
-			Thread.sleep(3000 * speed);
+			Thread.sleep(30 * speed);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -113,7 +117,7 @@ public class Woodcutter extends ProducerBuilding {
 
 	private void goToStore() {
 		try {
-			Thread.sleep(2000 * speed);
+			Thread.sleep(20 * speed);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -4,6 +4,8 @@ import castle.Castle;
 
 public class Building extends Thread {
 
+	public static final Object noBuildingLock = new Object();
+
 	protected Castle castle;
 	protected boolean working;
 
@@ -17,6 +19,9 @@ public class Building extends Thread {
 		setCastle(castle);
 		setWorking(true);
 		castle.getBuildings().add(this);
+		synchronized (noBuildingLock) {
+			noBuildingLock.notifyAll();
+		}	
 	}
 
 	// GETTERS AND SETTERS

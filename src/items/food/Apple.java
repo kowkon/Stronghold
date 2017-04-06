@@ -1,6 +1,5 @@
 package items.food;
 
-import castle.Castle;
 import items.Item;
 
 public class Apple extends Item {
@@ -22,18 +21,6 @@ public class Apple extends Item {
 	public Apple(int amount) {
 		this.amount = amount;
 		setStackLimit(100);
-	}
-
-	@Override
-	public void invokeBuildingsAdd(Castle castle) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void invokeBuildingsRemove(Castle castle) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

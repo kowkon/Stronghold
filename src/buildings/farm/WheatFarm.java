@@ -45,20 +45,24 @@ public class WheatFarm extends ProducerBuilding {
 	}
 
 	@Override
-	public synchronized void produce(Item item) {
+	public void produce(Item item) {
 		StorageBuilding stockpile;
-		while ((stockpile = findProduceBuilding()) == null) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (noBuildingLock) {
+			while ((stockpile = findProduceBuilding()) == null) {
+				try {
+					noBuildingLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		while (!stockpile.addItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (Stockpile.addLock) {
+			while (!stockpile.addItem(item)) {
+				try {
+					Stockpile.addLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

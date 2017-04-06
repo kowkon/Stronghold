@@ -11,6 +11,12 @@ public class IronMine extends ProducerBuilding {
 
 	private Stack stack;
 
+	/**
+	 * Constructs an Ironmine.
+	 * 
+	 * @param castle
+	 *            that the building belongs to.
+	 */
 	public IronMine(Castle castle) {
 		super(castle);
 		produceAmount = 1;
@@ -39,15 +45,16 @@ public class IronMine extends ProducerBuilding {
 
 	@Override
 	public void produce(Item item) {
-		StorageBuilding stack = findProduceBuilding();
-		while (!stack.addItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (Stack.addLock) {
+			StorageBuilding stack = findProduceBuilding();
+			while (!stack.addItem(item)) {
+				try {
+					Stack.addLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-
 	}
 
 	private void extractIron() {

@@ -10,6 +10,12 @@ import items.food.Apple;
 
 public class AppleOrchard extends ProducerBuilding {
 
+	/**
+	 * Constructs an AppleOrchard.
+	 * 
+	 * @param castle
+	 *            that the building belongs to.
+	 */
 	public AppleOrchard(Castle castle) {
 		super(castle);
 		produceAmount = 5;
@@ -45,20 +51,24 @@ public class AppleOrchard extends ProducerBuilding {
 	}
 
 	@Override
-	public synchronized void produce(Item item) {
+	public void produce(Item item) {
 		StorageBuilding granary;
-		while ((granary = findProduceBuilding()) == null) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (noBuildingLock) {
+			while ((granary = findProduceBuilding()) == null) {
+				try {
+					noBuildingLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		while (!granary.addItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		synchronized (Granary.addLock) {
+			while (!granary.addItem(item)) {
+				try {
+					Granary.addLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

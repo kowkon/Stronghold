@@ -1,6 +1,5 @@
 package items.foodProcessing;
 
-import castle.Castle;
 import items.Item;
 
 public class Flour extends Item {
@@ -13,18 +12,6 @@ public class Flour extends Item {
 	public Flour(int amount) {
 		setAmount(amount);
 		setStackLimit(40);
-	}
-
-	@Override
-	public void invokeBuildingsAdd(Castle castle) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void invokeBuildingsRemove(Castle castle) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

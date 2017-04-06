@@ -20,7 +20,7 @@ public class Quarry extends ProducerBuilding {
 	public Quarry(Castle castle) {
 		super(castle);
 		produceAmount = 1;
-		speed = 10;
+		speed = 100;
 		stack = new Stack(castle, new Stone());
 	}
 
@@ -44,13 +44,15 @@ public class Quarry extends ProducerBuilding {
 	}
 
 	@Override
-	public synchronized void produce(Item item) {
-		StorageBuilding stack = findProduceBuilding();
-		while (!stack.addItem(item)) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+	public void produce(Item item) {
+		synchronized (Stack.addLock) {
+			StorageBuilding stack = findProduceBuilding();
+			while (!stack.addItem(item)) {
+				try {
+					Stack.addLock.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

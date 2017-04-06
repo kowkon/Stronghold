@@ -5,6 +5,9 @@ import items.Item;
 
 public class Stack extends StorageBuilding {
 
+	public static final Object addLock = new Object();
+	public static final Object removeLock = new Object();
+
 	private int stackAmount;
 	private Item storedItem;
 
@@ -31,18 +34,21 @@ public class Stack extends StorageBuilding {
 	 * @return true if item can be added, false otherwise.
 	 */
 	@Override
-	public synchronized boolean addItem(Item item) {
-		if (!this.storedItem.getClass().equals(item.getClass()))
-			return false;
-		if (stackAmount <= this.storedItem.getStackLimit()) {
-			if (stackAmount + item.getAmount() > this.storedItem.getStackLimit()) {
-				stackAmount = item.getStackLimit();
-			} else {
-				stackAmount += item.getAmount();
+	public boolean addItem(Item item) {
+		synchronized (removeLock) {
+			if (!this.storedItem.getClass().equals(item.getClass()))
+				return false;
+			if (stackAmount <= this.storedItem.getStackLimit()) {
+				if (stackAmount + item.getAmount() > this.storedItem.getStackLimit()) {
+					stackAmount = item.getStackLimit();
+				} else {
+					stackAmount += item.getAmount();
+				}
+				removeLock.notifyAll();
+				return true;
 			}
-			return true;
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -54,17 +60,26 @@ public class Stack extends StorageBuilding {
 	 * @return true if item can be removed, false otherwise.
 	 */
 	@Override
-	public synchronized boolean removeItem(Item item) {
-		if (!this.storedItem.getClass().equals(item.getClass()))
-			return false;
-		if (stackAmount < item.getAmount())
-			return false;
-		stackAmount -= item.getAmount();
-		return true;
+	public boolean removeItem(Item item) {
+		synchronized (addLock) {
+			if (!this.storedItem.getClass().equals(item.getClass()))
+				return false;
+			if (stackAmount < item.getAmount())
+				return false;
+			stackAmount -= item.getAmount();
+			addLock.notifyAll();
+			return true;
+		}
 	}
 
 	public boolean isFull() {
 		if (stackAmount >= storedItem.getStackLimit())
+			return true;
+		return false;
+	}
+
+	public boolean isEmpty() {
+		if (stackAmount == 0)
 			return true;
 		return false;
 	}

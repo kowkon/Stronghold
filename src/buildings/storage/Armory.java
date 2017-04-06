@@ -1,34 +1,35 @@
 package buildings.storage;
 
 import java.util.ArrayList;
+
 import castle.Castle;
 import items.Item;
 
-public class Stockpile extends StorageBuilding {
+public class Armory extends StorageBuilding {
 
 	public static final Object addLock = new Object();
 	public static final Object removeLock = new Object();
 
 	private int roomLimit;
-	public ArrayList<Item> rooms;
+	private ArrayList<Item> rooms;
 
 	/**
-	 * Constructs a Stockpile.
+	 * Constructs an Armory.
 	 * 
 	 * @param castle
-	 *            that the building belongs to.
+	 *            that the building belong to.
 	 */
-	public Stockpile(Castle castle) {
+	public Armory(Castle castle) {
 		super(castle);
 		rooms = new ArrayList<>();
 		roomLimit = 4;
 	}
 
 	/**
-	 * Adds an item to the stockpile.
+	 * Adds an item to Armory.
 	 * 
 	 * @param item
-	 *            that will be added to the stockpile.
+	 *            that will be added to the Armory.
 	 */
 	@Override
 	public boolean addItem(Item item) {
@@ -62,15 +63,15 @@ public class Stockpile extends StorageBuilding {
 					return true;
 				}
 			}
+			return false;
 		}
-		return false;
 	}
 
 	/**
-	 * Removes an item from the stockpile.
+	 * Removes an item from the Armory.
 	 * 
 	 * @param item
-	 *            that will be removed from the stockpile.
+	 *            that will be removed from the Armory.
 	 */
 	@Override
 	public boolean removeItem(Item item) {

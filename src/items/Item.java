@@ -1,9 +1,7 @@
 package items;
 
-import castle.Castle;
-
 public abstract class Item {
-
+	
 	protected int amount;
 	protected int stackLimit;
 
@@ -23,10 +21,6 @@ public abstract class Item {
 	public Item(int amount) {
 		setAmount(amount);
 	}
-
-	public abstract void invokeBuildingsAdd(Castle castle);
-
-	public abstract void invokeBuildingsRemove(Castle castle);
 
 	public abstract Item create(int amount);
 

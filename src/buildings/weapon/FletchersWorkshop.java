@@ -1,21 +1,28 @@
-package buildings.foodProcessing;
+package buildings.weapon;
 
 import buildings.Building;
 import buildings.ProducerConsumerBuilding;
+import buildings.storage.Armory;
 import buildings.storage.Stockpile;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
 import items.Item;
-import items.foodProcessing.Flour;
-import items.foodProcessing.Wheat;
+import items.industrial.Wood;
+import items.weapon.Bow;
 
-public class Mill extends ProducerConsumerBuilding {
+public class FletchersWorkshop extends ProducerConsumerBuilding {
 
-	public Mill(Castle castle) {
+	/**
+	 * Constructs a Fletcher's Workshop.
+	 * 
+	 * @param castle
+	 *            that the building belongs to.
+	 */
+	public FletchersWorkshop(Castle castle) {
 		super(castle);
+		speed = 100;
+		consumeAmount = 2;
 		produceAmount = 1;
-		consumeAmount = 1;
-		speed = 200;
 	}
 
 	@Override
@@ -60,32 +67,28 @@ public class Mill extends ProducerConsumerBuilding {
 	@Override
 	public void work() {
 		while (working) {
-			goToMill();
-			goToStore();
-			consume(new Wheat(consumeAmount));
-			goToMill();
-			grind();
-			goToStore();
-			produce(new Flour(produceAmount));
+			goToWorkshop();
+			consumeAll();
+			produce(new Bow(1));
 		}
 	}
 
 	@Override
 	public StorageBuilding findProduceBuilding() {
-		StorageBuilding stockpile = null;
+		StorageBuilding armory = null;
 		for (Building b : castle.getBuildings()) {
-			if (b instanceof Stockpile) {
-				stockpile = (Stockpile) b;
+			if (b instanceof Armory) {
+				armory = (Armory) b;
 			}
 		}
-		return stockpile;
+		return armory;
 	}
 
 	@Override
 	public void produce(Item item) {
-		StorageBuilding stockpile;
+		StorageBuilding armory;
 		synchronized (noBuildingLock) {
-			while ((stockpile = findProduceBuilding()) == null) {
+			while ((armory = findProduceBuilding()) == null) {
 				try {
 					noBuildingLock.wait();
 				} catch (InterruptedException e) {
@@ -94,21 +97,13 @@ public class Mill extends ProducerConsumerBuilding {
 			}
 		}
 		synchronized (Stockpile.addLock) {
-			while (!stockpile.addItem(item)) {
+			while (!armory.addItem(item)) {
 				try {
 					Stockpile.addLock.wait();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-		}
-	}
-
-	private void goToMill() {
-		try {
-			Thread.sleep(speed * 10);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -120,11 +115,21 @@ public class Mill extends ProducerConsumerBuilding {
 		}
 	}
 
-	private void grind() {
+	private void goToWorkshop() {
 		try {
 			Thread.sleep(speed * 10);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void consumeAll() {
+		int totalConsumed = 0;
+		while (totalConsumed < 2) {
+			goToStore();
+			consume(new Wood(1));
+			++totalConsumed;
+			goToWorkshop();
 		}
 	}
 
