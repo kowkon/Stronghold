@@ -9,7 +9,7 @@ public class Apple extends Item {
 	 */
 	public Apple() {
 		setAmount(0);
-		setStackLimit(100);
+		setStackLimit(findStackLimit());
 	}
 
 	/**
@@ -20,7 +20,7 @@ public class Apple extends Item {
 	 */
 	public Apple(int amount) {
 		this.amount = amount;
-		setStackLimit(100);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

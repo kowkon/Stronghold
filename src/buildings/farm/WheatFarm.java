@@ -5,15 +5,15 @@ import buildings.ProducerBuilding;
 import buildings.storage.Stockpile;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.foodProcessing.Wheat;
 
 public class WheatFarm extends ProducerBuilding {
 
 	public WheatFarm(Castle castle) {
 		super(castle);
-		produceAmount = 1;
-		speed = 50;
+		produceAmount = findProduceAmount();
+		speed = castle.getSpeed();
+		this.start();
 	}
 
 	@Override
@@ -42,29 +42,6 @@ public class WheatFarm extends ProducerBuilding {
 			}
 		}
 		return stockpile;
-	}
-
-	@Override
-	public void produce(Item item) {
-		StorageBuilding stockpile;
-		synchronized (noBuildingLock) {
-			while ((stockpile = findProduceBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stockpile.addLock) {
-			while (!stockpile.addItem(item)) {
-				try {
-					Stockpile.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void goToFarm() {

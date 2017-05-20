@@ -4,7 +4,6 @@ import buildings.ProducerBuilding;
 import buildings.storage.Stack;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.industrial.Iron;
 
 public class IronMine extends ProducerBuilding {
@@ -19,7 +18,7 @@ public class IronMine extends ProducerBuilding {
 	 */
 	public IronMine(Castle castle) {
 		super(castle);
-		produceAmount = 1;
+		produceAmount = findProduceAmount();
 		speed = 5;
 		stack = new Stack(castle, new Iron());
 	}
@@ -41,20 +40,6 @@ public class IronMine extends ProducerBuilding {
 	@Override
 	public StorageBuilding findProduceBuilding() {
 		return stack;
-	}
-
-	@Override
-	public void produce(Item item) {
-		synchronized (Stack.addLock) {
-			StorageBuilding stack = findProduceBuilding();
-			while (!stack.addItem(item)) {
-				try {
-					Stack.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void extractIron() {

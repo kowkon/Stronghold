@@ -9,8 +9,11 @@ import castle.Castle;
 import items.Item;
 import items.industrial.Wood;
 import items.weapon.Bow;
+import items.weapon.Crossbow;
 
 public class FletchersWorkshop extends ProducerConsumerBuilding {
+
+	public boolean produceType;
 
 	/**
 	 * Constructs a Fletcher's Workshop.
@@ -21,8 +24,10 @@ public class FletchersWorkshop extends ProducerConsumerBuilding {
 	public FletchersWorkshop(Castle castle) {
 		super(castle);
 		speed = 100;
-		consumeAmount = 2;
-		produceAmount = 1;
+		produceAmount = findProduceAmount();
+		consumeAmount = findConsumeAmount();
+		produceType = true;
+		this.start();
 	}
 
 	@Override
@@ -42,34 +47,12 @@ public class FletchersWorkshop extends ProducerConsumerBuilding {
 	}
 
 	@Override
-	public void consume(Item item) {
-		StorageBuilding stockpile;
-		synchronized (noBuildingLock) {
-			while ((stockpile = findComsumeBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stockpile.removeLock) {
-			while (!stockpile.removeItem(item)) {
-				try {
-					Stockpile.removeLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	@Override
 	public void work() {
 		while (working) {
+			Item produceItem = findProduceItem();
 			goToWorkshop();
 			consumeAll();
-			produce(new Bow(1));
+			produce(produceItem);
 		}
 	}
 
@@ -82,29 +65,6 @@ public class FletchersWorkshop extends ProducerConsumerBuilding {
 			}
 		}
 		return armory;
-	}
-
-	@Override
-	public void produce(Item item) {
-		StorageBuilding armory;
-		synchronized (noBuildingLock) {
-			while ((armory = findProduceBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stockpile.addLock) {
-			while (!armory.addItem(item)) {
-				try {
-					Stockpile.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void goToStore() {
@@ -131,6 +91,15 @@ public class FletchersWorkshop extends ProducerConsumerBuilding {
 			++totalConsumed;
 			goToWorkshop();
 		}
+	}
+
+	private Item findProduceItem() {
+		Item produceItem = null;
+		if (produceType)
+			produceItem = new Bow(produceAmount);
+		else
+			produceItem = new Crossbow(produceAmount);
+		return produceItem;
 	}
 
 }

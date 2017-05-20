@@ -18,7 +18,6 @@ public class Building extends Thread {
 	public Building(Castle castle) {
 		setCastle(castle);
 		setWorking(true);
-		castle.getBuildings().add(this);
 		synchronized (noBuildingLock) {
 			noBuildingLock.notifyAll();
 		}	

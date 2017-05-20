@@ -6,12 +6,12 @@ public class Mace extends Item {
 
 	public Mace() {
 		setAmount(0);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	public Mace(int amount) {
 		setAmount(amount);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

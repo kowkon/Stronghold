@@ -27,9 +27,11 @@ public class OxTether extends ProducerConsumerBuilding {
 	public OxTether(Castle castle, Item item) {
 		super(castle);
 		carryItem = item;
-		consumeAmount = 5;
-		produceAmount = 8;
-		speed = 100;
+		stacks = getStacks();
+		produceAmount = findProduceAmount();
+		consumeAmount = findConsumeAmount();
+		speed = 10;
+		this.start();
 	}
 
 	@Override
@@ -47,32 +49,6 @@ public class OxTether extends ProducerConsumerBuilding {
 			}
 		}
 		return stack;
-	}
-
-	@Override
-	public void consume(Item item) {
-		StorageBuilding stack;
-		synchronized (noBuildingLock) {
-			while ((stacks = getStacks()).size() == 0) {
-				try {
-					System.out.println("no building");
-					Building.noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stack.removeLock) {
-			while ((stack = findComsumeBuilding()) == null) {
-				try {
-					System.out.println("waiting");
-					Stack.removeLock.wait();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			stack.removeItem(item);
-		}
 	}
 
 	@Override
@@ -95,29 +71,6 @@ public class OxTether extends ProducerConsumerBuilding {
 		return stockpile;
 	}
 
-	@Override
-	public void produce(Item item) {
-		StorageBuilding stockpile;
-		synchronized (noBuildingLock) {
-			while ((stockpile = findProduceBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stockpile.addLock) {
-			while (!stockpile.addItem(item)) {
-				try {
-					Stockpile.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 	private void goToBuilding() {
 		try {
 			Thread.sleep(speed * 10);
@@ -131,7 +84,6 @@ public class OxTether extends ProducerConsumerBuilding {
 		while (totalConsumed < produceAmount) {
 			consume(carryItem.create(1));
 			totalConsumed++;
-			System.out.println("consumed" + totalConsumed);
 		}
 	}
 

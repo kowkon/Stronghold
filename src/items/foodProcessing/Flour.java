@@ -6,12 +6,12 @@ public class Flour extends Item {
 
 	public Flour() {
 		setAmount(0);
-		setStackLimit(40);
+		setStackLimit(findStackLimit());
 	}
 
 	public Flour(int amount) {
 		setAmount(amount);
-		setStackLimit(40);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

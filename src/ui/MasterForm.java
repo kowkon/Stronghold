@@ -1,30 +1,29 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import buildings.storage.Armory;
+import buildings.storage.Granary;
 import buildings.storage.Stockpile;
 import castle.Castle;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import items.industrial.Iron;
+import items.industrial.Wood;
 
 public class MasterForm extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private Castle castle;
-	private JTextField textField;
-	private String s;
+	private static Castle castle = new Castle();
 
 	/**
 	 * Launch the application.
@@ -46,34 +45,73 @@ public class MasterForm extends JFrame {
 	 * Create the frame.
 	 */
 	public MasterForm() {
-		castle = new Castle();
-		s = "berat";
-		startBuildings();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new GridLayout(4, 0));
 		setContentPane(contentPane);
-		
-		textField = new JTextField();
-		contentPane.add(textField, BorderLayout.CENTER);
-		textField.setColumns(10);
-		textField.setText(s);
-		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				s = "asd";
-				textField.repaint();
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
 			}
 		});
-		contentPane.add(btnNewButton, BorderLayout.SOUTH);
-		textField.repaint();
+		setBounds(100, 100, 450, 300);
+		setTitle("Stronghold");
+
+		startBuildings();
+
+		JButton btnStockpile = new JButton("Stockpile");
+		btnStockpile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				StockpileFrame sf = new StockpileFrame(castle);
+				sf.setVisible(true);
+			}
+		});
+		
+		JButton btnGranary = new JButton("Granary");
+		btnGranary.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GranaryFrame gf = new GranaryFrame(castle);
+				gf.setVisible(true);
+			}
+		});
+		
+		JButton btnArmory = new JButton("Armory");
+		btnArmory.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArmoryFrame af = new ArmoryFrame(castle);
+				af.setVisible(true);
+			}
+		});
+		
+		JButton btnBuildings = new JButton("Buildings");
+		btnBuildings.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BuildingsFrame bf = new BuildingsFrame(castle);
+				bf.setVisible(true);
+			}
+		});
+		
+		contentPane.add(btnBuildings);
+		contentPane.add(btnStockpile);
+		contentPane.add(btnGranary);
+		contentPane.add(btnArmory);
+
 	}
 
 	private void startBuildings() {
-		Stockpile stockpile = new Stockpile(castle);
+		Stockpile s = new Stockpile(castle);
+		s.addItem(new Wood(30));
+		s.addItem(new Iron(30));
+		castle.addBuilding(s);
+		castle.addBuilding(new Granary(castle));
+		castle.addBuilding(new Armory(castle));
 	}
 
 }

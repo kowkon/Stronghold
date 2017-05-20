@@ -6,12 +6,12 @@ public class Wheat extends Item {
 
 	public Wheat() {
 		setAmount(0);
-		setStackLimit(50);
+		setStackLimit(findStackLimit());
 	}
 
 	public Wheat(int amount) {
 		setAmount(amount);
-		setStackLimit(50);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import buildings.ProducerBuilding;
 import buildings.storage.Stack;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.industrial.Stone;
 
 public class Quarry extends ProducerBuilding {
@@ -19,9 +18,10 @@ public class Quarry extends ProducerBuilding {
 	 */
 	public Quarry(Castle castle) {
 		super(castle);
-		produceAmount = 1;
-		speed = 100;
+		produceAmount = findProduceAmount();
+		speed = castle.getSpeed();
 		stack = new Stack(castle, new Stone());
+		this.start();
 	}
 
 	@Override
@@ -41,20 +41,6 @@ public class Quarry extends ProducerBuilding {
 	@Override
 	public StorageBuilding findProduceBuilding() {
 		return stack;
-	}
-
-	@Override
-	public void produce(Item item) {
-		synchronized (Stack.addLock) {
-			StorageBuilding stack = findProduceBuilding();
-			while (!stack.addItem(item)) {
-				try {
-					Stack.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void extractStone() {

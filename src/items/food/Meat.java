@@ -9,7 +9,7 @@ public class Meat extends Item {
 	 */
 	public Meat() {
 		setAmount(0);
-		setStackLimit(100);
+		setStackLimit(findStackLimit());
 	}
 
 	/**
@@ -20,7 +20,7 @@ public class Meat extends Item {
 	 */
 	public Meat(int amount) {
 		this.amount = amount;
-		setStackLimit(100);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

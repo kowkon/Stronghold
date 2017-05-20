@@ -1,0 +1,17 @@
+Wood                48  
+Stone               48  
+Iron                48  
+Apple               200 
+Bread               200 
+Cheese              200 
+Meat                200 
+Flour               40  
+Wheat               40  
+Bow                 10  
+Crossbow            10  
+Pike                10  
+Spear               10  
+Sword               10  
+Mace                10  
+LeatherArmor        10  
+MetalArmor          10  

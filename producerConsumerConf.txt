@@ -1,0 +1,8 @@
+Bakery              10  1   
+Mill                1   1   
+OxTether            8   8   
+ArmourersWorkshop   1   1   
+BlacksmithsWorkshop 1   1   
+FletchersWorkshop   1   1   
+PoleturnersWorkshop 1   1   
+TannersWorkshop     1   1   

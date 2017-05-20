@@ -5,7 +5,6 @@ import buildings.ProducerConsumerBuilding;
 import buildings.storage.Stockpile;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.foodProcessing.Flour;
 import items.foodProcessing.Wheat;
 
@@ -13,9 +12,10 @@ public class Mill extends ProducerConsumerBuilding {
 
 	public Mill(Castle castle) {
 		super(castle);
-		produceAmount = 1;
-		consumeAmount = 1;
-		speed = 200;
+		produceAmount = findConsumeAmount();
+		consumeAmount = findProduceAmount();
+		speed = castle.getSpeed();
+		this.start();
 	}
 
 	@Override
@@ -32,29 +32,6 @@ public class Mill extends ProducerConsumerBuilding {
 			}
 		}
 		return stockpile;
-	}
-
-	@Override
-	public void consume(Item item) {
-		StorageBuilding stockpile;
-		synchronized (noBuildingLock) {
-			while ((stockpile = findComsumeBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stockpile.removeLock) {
-			while (!stockpile.removeItem(item)) {
-				try {
-					Stockpile.removeLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	@Override
@@ -79,29 +56,6 @@ public class Mill extends ProducerConsumerBuilding {
 			}
 		}
 		return stockpile;
-	}
-
-	@Override
-	public void produce(Item item) {
-		StorageBuilding stockpile;
-		synchronized (noBuildingLock) {
-			while ((stockpile = findProduceBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stockpile.addLock) {
-			while (!stockpile.addItem(item)) {
-				try {
-					Stockpile.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void goToMill() {

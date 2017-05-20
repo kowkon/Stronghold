@@ -1,0 +1,7 @@
+Woodcutter          12  
+Quarry              1   
+IronMine            1   
+WheatFarm           1   
+AppleOrchard        8   
+HuntersPost         8   
+DairyFarm           8   

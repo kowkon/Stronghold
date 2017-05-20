@@ -6,12 +6,12 @@ public class Sword extends Item {
 
 	public Sword() {
 		setAmount(0);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	public Sword(int amount) {
 		setAmount(amount);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

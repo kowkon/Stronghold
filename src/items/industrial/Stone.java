@@ -9,7 +9,7 @@ public class Stone extends Item {
 	 */
 	public Stone() {
 		setAmount(0);
-		setStackLimit(48);
+		setStackLimit(findStackLimit());
 	}
 
 	/**
@@ -20,7 +20,7 @@ public class Stone extends Item {
 	 */
 	public Stone(int amount) {
 		setAmount(amount);
-		setStackLimit(48);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

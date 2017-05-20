@@ -5,15 +5,15 @@ import buildings.ProducerBuilding;
 import buildings.storage.Granary;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.food.Meat;
 
 public class HuntersPost extends ProducerBuilding {
 
 	public HuntersPost(Castle castle) {
 		super(castle);
-		produceAmount = 5;
-		speed = 5;
+		produceAmount = findProduceAmount();
+		speed = castle.getSpeed();
+		this.start();
 	}
 
 	@Override
@@ -43,29 +43,6 @@ public class HuntersPost extends ProducerBuilding {
 			}
 		}
 		return granary;
-	}
-
-	@Override
-	public void produce(Item item) {
-		StorageBuilding granary;
-		synchronized (noBuildingLock) {
-			while ((granary = findProduceBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Granary.addLock) {
-			while (!granary.addItem(item)) {
-				try {
-					Granary.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void goToHut() {

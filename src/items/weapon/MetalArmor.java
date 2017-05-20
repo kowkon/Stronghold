@@ -6,12 +6,12 @@ public class MetalArmor extends Item {
 
 	public MetalArmor() {
 		setAmount(0);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	public MetalArmor(int amount) {
 		setAmount(amount);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

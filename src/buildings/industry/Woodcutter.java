@@ -5,7 +5,6 @@ import buildings.ProducerBuilding;
 import buildings.storage.Stockpile;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.industrial.Wood;
 
 public class Woodcutter extends ProducerBuilding {
@@ -18,8 +17,9 @@ public class Woodcutter extends ProducerBuilding {
 	 */
 	public Woodcutter(Castle castle) {
 		super(castle);
-		produceAmount = 10;
-		speed = 20;
+		produceAmount = findProduceAmount();
+		speed = castle.getSpeed();
+		this.start();
 	}
 
 	@Override
@@ -50,29 +50,6 @@ public class Woodcutter extends ProducerBuilding {
 			}
 		}
 		return stockpile;
-	}
-
-	@Override
-	public void produce(Item item) {
-		synchronized (Stockpile.addLock) {
-			StorageBuilding stockpile;
-			while ((stockpile = findProduceBuilding()) == null) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			while (!stockpile.addItem(item)) {
-				try {	
-					System.out.println("waiting");
-					Stockpile.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			System.out.println("working");
-		}
 	}
 
 	private void goToHut() {

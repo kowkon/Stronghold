@@ -9,7 +9,7 @@ public class Iron extends Item {
 	 */
 	public Iron() {
 		setAmount(0);
-		setStackLimit(48);
+		setStackLimit(findStackLimit());
 	}
 
 	/**
@@ -20,7 +20,7 @@ public class Iron extends Item {
 	 */
 	public Iron(int amount) {
 		setAmount(amount);
-		setStackLimit(48);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

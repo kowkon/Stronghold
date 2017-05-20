@@ -6,12 +6,12 @@ public class Crossbow extends Item {
 
 	public Crossbow() {
 		setAmount(0);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	public Crossbow(int amount) {
 		setAmount(amount);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

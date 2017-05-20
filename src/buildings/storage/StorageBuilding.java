@@ -6,6 +6,9 @@ import items.Item;
 
 public abstract class StorageBuilding extends Building {
 
+	public final Object addLock = new Object();
+	public final Object removeLock = new Object();
+
 	/**
 	 * Constructor
 	 * 

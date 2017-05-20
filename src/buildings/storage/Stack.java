@@ -5,9 +5,6 @@ import items.Item;
 
 public class Stack extends StorageBuilding {
 
-	public static final Object addLock = new Object();
-	public static final Object removeLock = new Object();
-
 	private int stackAmount;
 	private Item storedItem;
 

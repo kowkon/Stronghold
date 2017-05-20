@@ -5,7 +5,6 @@ import buildings.ProducerBuilding;
 import buildings.storage.Granary;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.food.Apple;
 
 public class AppleOrchard extends ProducerBuilding {
@@ -18,8 +17,9 @@ public class AppleOrchard extends ProducerBuilding {
 	 */
 	public AppleOrchard(Castle castle) {
 		super(castle);
-		produceAmount = 5;
-		speed = 5;
+		produceAmount = findProduceAmount();
+		speed = castle.getSpeed();
+		this.start();
 	}
 
 	@Override
@@ -48,29 +48,6 @@ public class AppleOrchard extends ProducerBuilding {
 			}
 		}
 		return granary;
-	}
-
-	@Override
-	public void produce(Item item) {
-		StorageBuilding granary;
-		synchronized (noBuildingLock) {
-			while ((granary = findProduceBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Granary.addLock) {
-			while (!granary.addItem(item)) {
-				try {
-					Granary.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void goToOrchard() {

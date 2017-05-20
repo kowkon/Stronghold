@@ -6,12 +6,12 @@ public class Spear extends Item {
 
 	public Spear() {
 		setAmount(0);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	public Spear(int amount) {
 		setAmount(amount);
-		setStackLimit(10);
+		setStackLimit(findStackLimit());
 	}
 
 	@Override

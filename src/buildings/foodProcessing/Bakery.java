@@ -6,7 +6,6 @@ import buildings.storage.Granary;
 import buildings.storage.Stockpile;
 import buildings.storage.StorageBuilding;
 import castle.Castle;
-import items.Item;
 import items.food.Bread;
 import items.foodProcessing.Flour;
 
@@ -14,9 +13,10 @@ public class Bakery extends ProducerConsumerBuilding {
 
 	public Bakery(Castle castle) {
 		super(castle);
-		produceAmount = 10;
-		consumeAmount = 1;
-		speed = 600;
+		produceAmount = findProduceAmount();
+		consumeAmount = findConsumeAmount();
+		speed = castle.getSpeed();
+		this.start();
 	}
 
 	@Override
@@ -33,29 +33,6 @@ public class Bakery extends ProducerConsumerBuilding {
 			}
 		}
 		return stockpile;
-	}
-
-	@Override
-	public void consume(Item item) {
-		StorageBuilding stockpile;
-		synchronized (noBuildingLock) {
-			while ((stockpile = findComsumeBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Stockpile.removeLock) {
-			while (!stockpile.removeItem(item)) {
-				try {
-					Stockpile.removeLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	@Override
@@ -80,29 +57,6 @@ public class Bakery extends ProducerConsumerBuilding {
 			}
 		}
 		return granary;
-	}
-
-	@Override
-	public void produce(Item item) {
-		StorageBuilding granary;
-		synchronized (noBuildingLock) {
-			while ((granary = findProduceBuilding()) == null) {
-				try {
-					noBuildingLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		synchronized (Granary.addLock) {
-			while (!granary.addItem(item)) {
-				try {
-					Granary.addLock.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private void goToBakery() {
